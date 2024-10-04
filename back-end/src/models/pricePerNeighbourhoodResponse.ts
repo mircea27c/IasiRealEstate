@@ -1,5 +1,10 @@
-interface pricePerNeighbourhoodResponse {
-  prices: { neighbourhood: string; amount: number }[];
+export interface NeighbourhoodPriceData {
+  neighbourhood: string;
+  amount: number;
 }
 
-export default pricePerNeighbourhoodResponse;
+interface PricePerNeighbourhoodResponse {
+  prices: NeighbourhoodPriceData[];
+}
+
+export default PricePerNeighbourhoodResponse;
