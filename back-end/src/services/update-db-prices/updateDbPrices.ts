@@ -4,15 +4,14 @@ import allNeighbourhoods, {
   NeighbourhoodAlias,
 } from "../get-price-per-neighbourhood/allNeighbourhoods";
 import scrapeNeighbourhoodOLX from "../../scrapers/scrapeNeighbourhoodOLX";
+import NeighbourhoodOfferData from "../../models/NeighbourhoodOfferData";
+import alertOwnerEmail from "../../emails/alertOwnerEmail";
+
+let goodDealOffers: NeighbourhoodOfferData[] = [];
 
 const getAverage = (array: number[]) => {
   if (array.length == 0) return 0;
   return Math.round(array.reduce((acc, value) => acc + value) / array.length);
-};
-
-const alertGoodDeal = (url: string, title: string, price: string) => {
-  console.log(`${price} EURO ${title}`);
-  console.log(`${url}`);
 };
 
 const averagePricePerAreaFromListings = (
@@ -24,6 +23,7 @@ const averagePricePerAreaFromListings = (
   const MAX_VALID_PRICE = 4000;
 
   const validPrices: number[] = [];
+
   listings.each((_: number, item: any) => {
     const apartmentListing = $(item).closest("div").parent();
     const findInListing = (query: string) => {
@@ -61,12 +61,15 @@ const averagePricePerAreaFromListings = (
 
       const pricePerArea = price / area;
       if (pricePerArea > MIN_VALID_PRICE && pricePerArea < MAX_VALID_PRICE) {
-        if (pricePerArea < MIN_VALID_PRICE * 2) {
-          alertGoodDeal(
-            titleElement.attr("href") ?? "",
-            titleElement.text(),
-            pricePerArea.toString(),
-          );
+        if (pricePerArea < MIN_VALID_PRICE * 1.9) {
+          console.log("Good offer");
+          goodDealOffers.push({
+            url: titleElement.attr("href") ?? "",
+            title: titleElement.text(),
+            totalPrice: price,
+            pricePerArea: pricePerArea,
+            area: area,
+          });
         }
         validPrices.push(pricePerArea);
       }
@@ -130,13 +133,14 @@ const updateDbPriceForNeighbourhood = async (
 
 export const updateDbPrices = async () => {
   const queries = [];
+  goodDealOffers = [];
   for (const neighbourhood of allNeighbourhoods) {
     const price = await getNeighbourhoodAveragePrice(neighbourhood);
     if (price > 0) {
       queries.push(updateDbPriceForNeighbourhood(neighbourhood.id, price));
     }
   }
-
+  if (goodDealOffers.length > 0) alertOwnerEmail(goodDealOffers);
   await Promise.all(queries);
 };
 

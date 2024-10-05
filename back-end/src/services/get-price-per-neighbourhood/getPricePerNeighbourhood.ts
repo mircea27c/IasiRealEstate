@@ -1,4 +1,4 @@
-import PricePerNeighbourhoodResponse from "../../models/pricePerNeighbourhoodResponse";
+import PricePerNeighbourhoodResponse from "../../models/PricePerNeighbourhoodResponse";
 import db from "../../db/db";
 
 const getPricePerNeighbourhoodFromDb: () => Promise<PricePerNeighbourhoodResponse> =

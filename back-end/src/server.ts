@@ -2,6 +2,7 @@ import express from "express";
 import getPricePerNeighbourhoodService from "./services/get-price-per-neighbourhood/getPricePerNeighbourhood";
 import updateDbPricesService from "./services/update-db-prices/updateDbPrices";
 import { startUpdateDbPricesJob } from "./cron-jobs/updateDbPricesJob";
+import { sendTestMail } from "./emails/test-mailer";
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.get("/api/healthcheck", (_req, res) => {
 });
 
 app.get("/api/get-price-per-neighbourhood", getPricePerNeighbourhoodService);
+
+app.get("/email/test", sendTestMail);
 
 app.get("/db/update-prices", updateDbPricesService);
 
