@@ -1,21 +1,15 @@
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker,
-} from "react-simple-map";
-import {
-  getApiDataForGeoId,
-  getIdDataForGeoId,
-} from "../../../mappers/neighbourhoodIdMappings";
+import { getApiDataForGeoId } from "../../../mappers/neighbourhoodIdMappings";
 import React from "react";
-import styled from "@emotion/styled";
-import { GeoData } from "../../../models/GeoData";
 import { ApiNeighbourhoodPrices } from "../../../models/Api/ApiNeighbourhoodPrices";
-import { Position } from "geojson";
+import { FeatureCollection } from "geojson";
+import { GeoJSON, MapContainer, SVGOverlay, TileLayer } from "react-leaflet";
+import { LatLngBoundsExpression } from "leaflet";
+import styled from "@emotion/styled";
+import font from "../../../theme/font";
+import { useTheme } from "@emotion/react";
 
 const LabelMeasureUnitTspan = styled.tspan`
-  font-size: 10px;
+  ${font.sizes.small}
   font-weight: 500;
   text-anchor: middle;
 
@@ -23,21 +17,12 @@ const LabelMeasureUnitTspan = styled.tspan`
   text-shadow: 0 0 3px black;
 `;
 const LabelPriceTspan = styled.tspan`
-  font-size: 15px;
+  ${font.sizes.medium}
   font-weight: 500;
   text-anchor: middle;
 
   fill: white;
   text-shadow: 0 0 5px black;
-`;
-
-const NeighbourhoodsMapWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
 `;
 
 const getColourFromPrice = (price: number, min: number, max: number) => {
@@ -51,92 +36,89 @@ const getColourFromPrice = (price: number, min: number, max: number) => {
   return `rgb(${red}, ${green}, ${blue})`;
 };
 
-interface NeighbourhoodLabelsProps {
-  geoData: GeoData;
-  pricesData: ApiNeighbourhoodPrices;
-}
-const NeighbourhoodLabels: React.FC<NeighbourhoodLabelsProps> = ({
-  geoData,
-  pricesData,
-}) => (
-  <>
-    {geoData.features.map((item) => {
-      const geoId = item.properties.NameId;
-      const price = getApiDataForGeoId(geoId, pricesData)?.amount;
-      const displayName = getIdDataForGeoId(geoId)?.displayName;
-
-      if (!price || !displayName) return;
-
-      return (
-        <Marker
-          key={geoId}
-          coordinates={[item.properties.label_y, item.properties.label_x]}
-        >
-          <g transform="translate(0, 3)">
-            <text>
-              <LabelPriceTspan>{price}€</LabelPriceTspan>
-              <LabelMeasureUnitTspan>/m²</LabelMeasureUnitTspan>
-            </text>
-          </g>
-        </Marker>
-      );
-    })}
-  </>
-);
-
 interface NeighbourhoodsMapProps {
-  geoData: GeoData;
+  geoData: FeatureCollection;
   pricesData: ApiNeighbourhoodPrices;
-  center: Position;
 }
 const NeighbourhoodsMap: React.FC<NeighbourhoodsMapProps> = ({
   geoData,
   pricesData,
-  center,
 }) => {
+  const startingScale = 13;
+  const theme = useTheme();
+
+  const [x, y] = [47.145, 27.6];
+  const xBound = 0.1;
+  const yBound = 0.3;
+  const bounds: LatLngBoundsExpression = [
+    [x + xBound, y + yBound],
+    [x - xBound, y - yBound],
+  ];
+
   return (
-    <NeighbourhoodsMapWrapper>
-      <ComposableMap
-        projection={"geoMercator"}
-        projectionConfig={{ scale: 330000, center: [center[0], center[1]] }}
-        width={1000}
-        height={1000}
-      >
-        <Geographies geography={geoData}>
-          {({ geographies }) =>
-            geographies.map((geo) => {
-              const priceData = getApiDataForGeoId(
-                geo.properties.NameId,
-                pricesData,
-              );
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  stroke={"#212121"}
-                  strokeWidth={1.5}
-                  fill={getColourFromPrice(priceData?.amount ?? 0, 1000, 2800)}
-                  style={{
-                    default: {
-                      fillOpacity: 0.6,
-                      outline: "none",
-                    },
-                    hover: {
-                      fillOpacity: 0.9,
-                      outline: "none",
-                    },
-                    pressed: {
-                      outline: "none",
-                    },
-                  }}
-                />
-              );
-            })
-          }
-        </Geographies>
-        <NeighbourhoodLabels geoData={geoData} pricesData={pricesData} />
-      </ComposableMap>
-    </NeighbourhoodsMapWrapper>
+    <MapContainer
+      center={[47.145, 27.6]}
+      maxBounds={bounds}
+      maxBoundsViscosity={1.0}
+      zoom={startingScale}
+      minZoom={12}
+      maxZoom={15}
+      style={{
+        flexGrow: 1,
+        width: "100%",
+      }}
+    >
+      <TileLayer
+        zIndex={1}
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
+      />
+      {geoData && (
+        <GeoJSON
+          data={geoData}
+          style={(feature: any) => {
+            const priceData = getApiDataForGeoId(
+              feature.properties.NameId,
+              pricesData,
+            );
+            return {
+              fillColor: getColourFromPrice(priceData?.amount ?? 0, 700, 2700),
+              weight: 2,
+              opacity: 1,
+              color: theme.colours.black,
+              fillOpacity: 0.6,
+            };
+          }}
+        />
+      )}
+      {geoData.features.map((item) => {
+        if (!item.properties) return;
+
+        const [x, y] = [item.properties.label_x, item.properties.label_y];
+        const labelSize = 0.1;
+        const bounds: LatLngBoundsExpression = [
+          [x + labelSize, y + labelSize],
+          [x - labelSize, y - labelSize],
+        ];
+
+        const priceData = getApiDataForGeoId(
+          item.properties.NameId,
+          pricesData,
+        );
+        if (!priceData) return;
+
+        return (
+          <SVGOverlay bounds={bounds}>
+            <g>
+              <text x={"50%"} y={"50%"}>
+                <LabelPriceTspan>{priceData.amount}€</LabelPriceTspan>
+                <LabelMeasureUnitTspan>/m²</LabelMeasureUnitTspan>
+              </text>
+            </g>
+          </SVGOverlay>
+        );
+      })}
+    </MapContainer>
   );
 };
 

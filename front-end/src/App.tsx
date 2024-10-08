@@ -1,20 +1,56 @@
 import React from "react";
 import "./App.css";
-import NeighbourhoodPriceSection from "./components/neighbourhood-price-section/NeighbourhoodPriceSection";
 import styled from "@emotion/styled";
+import Banner from "./components/banner/Banner";
+import font from "./theme/font";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NeighbourhoodPricePage from "./pages/NeighbourhoodPricePage";
+import HistoricPricePage from "./pages/HistoricPricePage";
+import NotificationsPage from "./pages/NotificationsPage";
+import AboutPage from "./pages/AboutPage";
+import sizes from "./theme/sizes";
 
 const AppContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
+
+  background-color: ${({ theme }) => theme.colours.background};
+  ${font.family};
+`;
+
+const PageContainer = styled.div`
   width: 100%;
-  min-height: 100vh;
+  padding: ${sizes.size12} ${sizes.size96};
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  column-gap: ${sizes.size12};
+
+  flex-grow: 1;
 `;
 
 const App: React.FC = () => {
   return (
     <AppContainer className="App">
-      <NeighbourhoodPriceSection />
+      <BrowserRouter>
+        <Banner />
+        <PageContainer>
+          <Routes>
+            <Route path={"/"} element={<NeighbourhoodPricePage />} />
+            <Route path={"/istoric"} element={<HistoricPricePage />} />
+            <Route path={"/notificari"} element={<NotificationsPage />} />
+            <Route path={"/despre"} element={<AboutPage />} />
+          </Routes>
+        </PageContainer>
+      </BrowserRouter>
     </AppContainer>
   );
 };
