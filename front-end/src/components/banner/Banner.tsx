@@ -8,7 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 const BannerContainer = styled.div`
   height: ${sizes.size72};
   width: 100%;
-  padding: 0 ${sizes.size96};
+  padding: 0 ${sizes.globalLateralPadding};
   box-sizing: border-box;
 
   display: flex;

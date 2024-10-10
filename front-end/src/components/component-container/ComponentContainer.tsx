@@ -13,6 +13,8 @@ const StyledContainer = styled.div<{ fullHeight: boolean }>`
   ${({ fullHeight }) => fullHeight && "flex-grow:1"};
 
   overflow: hidden;
+  box-shadow: 0 0 ${sizes.size16} ${({ theme }) => theme.colours.shadow};
+  border-radius: ${sizes.size16};
 `;
 
 interface ComponentContainerProps {

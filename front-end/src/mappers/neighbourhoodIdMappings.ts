@@ -36,7 +36,7 @@ export const neighbourhoodIdMappings: neighbourhoodIdMapping[] = [
     displayName: "Moara De Vant",
   },
   { geoId: "Tatarasi", apiId: "tatarasi", displayName: "Tatarasi" },
-  { geoId: "Tudor", apiId: "tudor", displayName: "Tudor" },
+  { geoId: "Tudor", apiId: "tudor", displayName: "Tudor Vladimirescu" },
   { geoId: "PoduRos", apiId: "podu ros", displayName: "Podu Ros" },
   { geoId: "Ticau", apiId: "ticau", displayName: "Ticau" },
   { geoId: "Agronomie", apiId: "agronomie", displayName: "Agronomie" },

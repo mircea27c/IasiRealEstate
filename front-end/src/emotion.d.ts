@@ -1,5 +1,4 @@
 import "@emotion/react";
-import sizes from "./theme/sizes";
 
 declare module "@emotion/react" {
   export interface Theme {
@@ -12,6 +11,7 @@ declare module "@emotion/react" {
       foreground: string;
       text: string;
       black: string;
+      shadow: string;
     };
   }
 }

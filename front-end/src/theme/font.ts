@@ -19,10 +19,10 @@ interface FontConfig {
 const font: FontConfig = {
   family: `font-family: "DM Sans", sans-serif;`,
   sizes: {
-    small: `font-size: ${sizes.size10};`,
+    small: `font-size: ${sizes.size14};`,
     medium: `font-size: ${sizes.size18};`,
-    large: `font-size: ${sizes.size36};`,
-    title: `font-size: ${sizes.size48};`,
+    large: `font-size: ${sizes.size24};`,
+    title: `font-size: ${sizes.size36};`,
   },
   weights: {
     thin: "font-weight: 300;",

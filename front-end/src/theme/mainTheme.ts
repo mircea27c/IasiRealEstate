@@ -11,5 +11,6 @@ export const mainTheme: Theme = {
     foreground: "#F2FFF0",
     text: "#232322",
     black: "#000000",
+    shadow: "rgba(0,0,0,0.13)",
   },
 };

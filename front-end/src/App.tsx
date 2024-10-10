@@ -26,7 +26,7 @@ const AppContainer = styled.div`
 
 const PageContainer = styled.div`
   width: 100%;
-  padding: ${sizes.size12} ${sizes.size96};
+  padding: ${sizes.size12} ${sizes.globalLateralPadding};
   box-sizing: border-box;
 
   display: flex;

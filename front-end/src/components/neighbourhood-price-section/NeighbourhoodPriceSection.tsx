@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styled from "@emotion/styled";
 import { ApiNeighbourhoodPrices } from "../../models/Api/ApiNeighbourhoodPrices";
-import { FeatureCollection, GeoJsonObject } from "geojson";
+import { FeatureCollection } from "geojson";
 import NeighbourhoodsMap from "./subcomponents/NeighbourhoodsMap";
+import LoadingSpinner from "../loading-spinner/LoadingSpinner";
 
 const NeighbourhoodPriceSection: React.FC = () => {
   const [geoData, setGeoData] = useState<FeatureCollection | undefined>(
@@ -23,8 +23,7 @@ const NeighbourhoodPriceSection: React.FC = () => {
       .then((data) => setPricesData(data))
       .catch((err) => console.log(`Error occurred when fetching: ${err}`));
   }, []);
-  if (!geoData || !pricesData) return <div>Loading...</div>;
-
+  if (!geoData || !pricesData) return <LoadingSpinner />;
   return <NeighbourhoodsMap geoData={geoData} pricesData={pricesData} />;
 };
 
