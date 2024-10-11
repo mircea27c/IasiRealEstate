@@ -12,6 +12,9 @@ app.use(cors());
 
 startUpdateDbPricesJob();
 
+app.get("/", (_req, res) => {
+  res.status(200).send("Welcome to the Iasi Real Estate Api");
+});
 app.get("/api/healthcheck", (_req, res) => {
   res.status(200).send("Api is healthy!");
 });

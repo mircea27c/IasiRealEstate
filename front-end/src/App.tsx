@@ -35,6 +35,10 @@ const PageContainer = styled.div`
   column-gap: ${sizes.size12};
 
   flex-grow: 1;
+
+  @media (max-width: 800px) {
+    padding: ${sizes.size12};
+  }
 `;
 
 const App: React.FC = () => {

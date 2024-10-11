@@ -18,6 +18,10 @@ const BannerContainer = styled.div`
   color: ${({ theme }) => theme.colours.secondary};
 
   background-color: ${({ theme }) => theme.colours.foreground};
+
+  @media (max-width: 800px) {
+    padding: 0 ${sizes.size8};
+  }
 `;
 
 const NavbarContainer = styled.nav`
@@ -26,8 +30,14 @@ const NavbarContainer = styled.nav`
   width: fit-content;
   gap: ${sizes.size96};
 
-  ${font.sizes.medium}
-  ${font.weights.thin}
+  ${font.sizes.medium};
+  ${font.weights.thin};
+
+  @media (max-width: 800px) {
+    padding: 0;
+    gap: ${sizes.size16};
+    ${font.sizes.small};
+  }
 `;
 
 const StyledLink = styled(Link)`
