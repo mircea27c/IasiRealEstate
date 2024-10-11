@@ -15,7 +15,7 @@ const getPricePerNeighbourhoodFromDb: () => Promise<PricePerNeighbourhoodRespons
 const getPricePerNeighbourhoodService = async (_req: any, res: any) => {
   try {
     const response = await getPricePerNeighbourhoodFromDb();
-    res.status(200).send(response);
+    res.send(response).status(200);
   } catch (err) {
     console.error(
       `There's been an error in getting price per neighbourhood: ${err}`,

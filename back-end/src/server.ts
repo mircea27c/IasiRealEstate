@@ -3,24 +3,24 @@ import getPricePerNeighbourhoodService from "./services/get-price-per-neighbourh
 import updateDbPricesService from "./services/update-db-prices/updateDbPrices";
 import { startUpdateDbPricesJob } from "./cron-jobs/updateDbPricesJob";
 import { sendTestMail } from "./emails/test-mailer";
+import subscribeToNotificationsService from "./services/subscribe-to-notifications/subscribeToNotificationsService";
 
 const app = express();
-
-const hostname = "localhost";
-const port = 5000;
+app.use(express.json());
 
 startUpdateDbPricesJob();
 
 app.get("/api/healthcheck", (_req, res) => {
   res.status(200).send("Api is healthy!");
 });
-
 app.get("/api/get-price-per-neighbourhood", getPricePerNeighbourhoodService);
+
+app.post("/api/subscribe-to-notifications", subscribeToNotificationsService);
 
 app.get("/email/test", sendTestMail);
 
 app.get("/db/update-prices", updateDbPricesService);
 
-app.listen(port, hostname, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(Number(process.env.PORT), process.env.HOST ?? "5000", () => {
+  console.log(`Server is running on ${process.env.HOST}:${process.env.PORT}!`);
 });
