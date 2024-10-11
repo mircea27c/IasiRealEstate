@@ -30,15 +30,17 @@ const NavbarContainer = styled.nav`
   ${font.weights.thin}
 `;
 
-const StyledLink = styled(Link)<{ isActive: boolean }>`
+const StyledLink = styled(Link)`
   text-decoration: none;
 
-  border-bottom: ${({ isActive, theme }) =>
-    isActive ? `${sizes.size2} solid ${theme.colours.secondary}` : "none"};
-
+  color: ${({ theme }) => theme.colours.secondary};
   &:visited {
     color: ${({ theme }) => theme.colours.secondary};
   }
+`;
+const StyledUnderline = styled.div`
+  ${({ theme }) =>
+    `border-bottom: ${sizes.size2} solid ${theme.colours.secondary}`};
 `;
 
 interface NavbarLinkProps {
@@ -49,8 +51,12 @@ interface NavbarLinkProps {
 const NavbarLink: React.FC<NavbarLinkProps> = ({ path, text }) => {
   const location = useLocation();
   return (
-    <StyledLink isActive={location.pathname === path} to={path}>
-      {text}
+    <StyledLink to={path}>
+      {location.pathname === path ? (
+        <StyledUnderline>{text}</StyledUnderline>
+      ) : (
+        <> {text}</>
+      )}
     </StyledLink>
   );
 };

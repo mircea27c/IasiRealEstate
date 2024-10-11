@@ -18,7 +18,11 @@ const NeighbourhoodPriceSection: React.FC = () => {
       .then((data) => setGeoData(data))
       .catch((err) => console.log(`Error occurred when fetching: ${err}`));
 
-    fetch("api/get-price-per-neighbourhood")
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    console.log("url:" + apiUrl); // This should log "http://localhost:5000"
+
+    fetch(`${process.env.REACT_APP_API_URL}/api/get-price-per-neighbourhood`)
       .then((response) => response.json())
       .then((data) => setPricesData(data))
       .catch((err) => console.log(`Error occurred when fetching: ${err}`));

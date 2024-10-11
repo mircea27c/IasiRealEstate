@@ -10,6 +10,7 @@ const StyledContainer = styled.div<{ fullHeight: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   ${({ fullHeight }) => fullHeight && "flex-grow:1"};
 
   overflow: hidden;

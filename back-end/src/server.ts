@@ -4,9 +4,11 @@ import updateDbPricesService from "./services/update-db-prices/updateDbPrices";
 import { startUpdateDbPricesJob } from "./cron-jobs/updateDbPricesJob";
 import { sendTestMail } from "./emails/test-mailer";
 import subscribeToNotificationsService from "./services/subscribe-to-notifications/subscribeToNotificationsService";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 startUpdateDbPricesJob();
 
