@@ -26,9 +26,11 @@ const getHistoricPricesService = async (req: any, res: any) => {
       [key: string]: NeighbourhoodPriceData[];
     } = {};
     result.rows.forEach((row) => {
-      resultGroupedByTimestamp[row.timestamp] =
-        resultGroupedByTimestamp[row.timestamp] ?? [];
-      resultGroupedByTimestamp[row.timestamp].push({
+      const formattedTimestamp = new Date(row.timestamp).toISOString();
+
+      resultGroupedByTimestamp[formattedTimestamp] =
+        resultGroupedByTimestamp[formattedTimestamp] ?? [];
+      resultGroupedByTimestamp[formattedTimestamp].push({
         neighbourhood: row.neighbourhood_id,
         amount: row.price,
       });

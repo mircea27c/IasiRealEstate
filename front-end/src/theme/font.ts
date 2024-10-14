@@ -22,7 +22,7 @@ const font: FontConfig = {
     small: `font-size: ${sizes.size14};`,
     medium: `font-size: ${sizes.size18};`,
     large: `font-size: ${sizes.size24};`,
-    title: `font-size: ${sizes.size36};`,
+    title: `font-size: ${sizes.size32};`,
   },
   weights: {
     thin: "font-weight: 300;",

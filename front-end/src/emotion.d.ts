@@ -12,6 +12,7 @@ declare module "@emotion/react" {
       text: string;
       black: string;
       shadow: string;
+      chart: string[];
     };
   }
 }

@@ -13,7 +13,7 @@ const sizes = {
   size18: pixelsToRem(18),
   size20: pixelsToRem(20),
   size24: pixelsToRem(24),
-  size36: pixelsToRem(36),
+  size32: pixelsToRem(32),
   size48: pixelsToRem(48),
   size64: pixelsToRem(64),
   size72: pixelsToRem(72),

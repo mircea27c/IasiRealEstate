@@ -112,8 +112,12 @@ const NeighbourhoodsMap: React.FC<NeighbourhoodsMapProps> = ({
           )}
         />
       )}
-      {geoData.features.map((item) => (
-        <NeighbourhoodFeatureLabel feature={item} pricesData={pricesData} />
+      {geoData.features.map((item, index) => (
+        <NeighbourhoodFeatureLabel
+          key={item.properties?.NameId ?? `feature-${index}`}
+          feature={item}
+          pricesData={pricesData}
+        />
       ))}
       {tooltipInfo && (
         <NeighbourhoodTooltip

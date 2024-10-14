@@ -1,3 +1,7 @@
+export interface ApiNeighbourhoodPrice {
+  neighbourhood: string;
+  amount: number;
+}
 export interface ApiNeighbourhoodPrices {
-  prices: { neighbourhood: string; amount: number }[];
+  prices: ApiNeighbourhoodPrice[];
 }

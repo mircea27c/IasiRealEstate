@@ -1,5 +1,4 @@
 import { Theme } from "@emotion/react";
-import sizes from "./sizes";
 
 export const mainTheme: Theme = {
   colours: {
@@ -12,5 +11,27 @@ export const mainTheme: Theme = {
     text: "#232322",
     black: "#000000",
     shadow: "rgba(0,0,0,0.13)",
+    chart: [
+      "#382269",
+      "#3b3b3b",
+      "#5c5c5c",
+      "#7a7a7a",
+      "#4e4e4e",
+      "#2d2d2d",
+      "#1f78b4",
+      "#b24c3e",
+      "#a50b5b",
+      "#4f8f40",
+      "#2a9d8f",
+      "#457b9d",
+      "#000000",
+      "#555555",
+      "#85623c",
+      "#9b3d3d",
+      "#737373",
+      "#6b8e23",
+      "#708090",
+      "#4169e1",
+    ],
   },
 };
