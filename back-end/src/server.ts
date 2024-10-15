@@ -17,12 +17,10 @@ startUpdateDbPricesJob();
 startUpdateDbHistoricPricesJob();
 
 app.get("/", (_req, res) => {
+  console.log("Pinged");
   res.status(200).send("Welcome to the Iasi Real Estate Api");
 });
 app.get("/api/healthcheck", (_req, res) => {
-  console.log("Api Check!");
-  console.log("IP Address: ", _req.ip);
-  console.log("Headers: ", _req.headers);
   res.status(200).send("Api is healthy!");
 });
 app.get("/api/get-price-per-neighbourhood", getPricePerNeighbourhoodService);
