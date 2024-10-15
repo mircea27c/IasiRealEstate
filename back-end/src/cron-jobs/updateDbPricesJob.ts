@@ -7,10 +7,11 @@ const updateDbPricesJob = async () => {
     console.log("Updating historic prices...");
     updateDbPrices();
   } catch (err) {
-    console.log(`Error running periodic db update prices job: ${err}`);
+    console.error(`Error running periodic db update prices job: ${err}`);
   }
 };
 
 export const startUpdateDbPricesJob = () => {
-  cron.schedule(`0 */${DB_PRICES_INTERVAL_HOURS} * * *`, updateDbPricesJob);
+  console.log("Starting db update price job");
+  cron.schedule(`*/10 * * * *`, updateDbPricesJob);
 };

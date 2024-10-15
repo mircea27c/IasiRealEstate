@@ -20,6 +20,7 @@ app.get("/", (_req, res) => {
   res.status(200).send("Welcome to the Iasi Real Estate Api");
 });
 app.get("/api/healthcheck", (_req, res) => {
+  console.log("Api Check!");
   res.status(200).send("Api is healthy!");
 });
 app.get("/api/get-price-per-neighbourhood", getPricePerNeighbourhoodService);

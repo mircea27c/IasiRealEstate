@@ -7,7 +7,7 @@ const updateDbHistoricPrices = async () => {
     console.log("Updating historic prices...");
     updateHistoricDbPrices(new Date());
   } catch (err) {
-    console.log(`Error running periodic db update prices job: ${err}`);
+    console.error(`Error running periodic db update prices job: ${err}`);
   }
 };
 
