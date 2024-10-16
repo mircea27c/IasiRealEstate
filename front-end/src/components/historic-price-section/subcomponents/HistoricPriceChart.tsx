@@ -13,11 +13,6 @@ import { ApiHistoricPrice } from "../../../models/Api/ApiHistoricPrices";
 import styled from "@emotion/styled";
 import sizes from "../../../theme/sizes";
 
-const StyledLineChart = styled(LineChart)`
-  padding: ${sizes.size32} ${sizes.size64} ${sizes.size32} ${sizes.size32};
-  box-sizing: border-box;
-`;
-
 const getFormattedDate = (dataObject: ApiHistoricPrice) => {
   const date = new Date(dataObject.timestamp);
   const day = String(date.getDate()).padStart(2, "0");
@@ -43,8 +38,8 @@ const HistoricPriceChart: React.FC<HistoricPriceChartProps> = ({ data }) => {
   minPrice = Math.floor(minPrice / 100) * 100;
   maxPrice = Math.ceil(maxPrice / 100) * 100;
   return (
-    <ResponsiveContainer width="100%" aspect={2}>
-      <StyledLineChart data={data}>
+    <ResponsiveContainer width="90%" aspect={2}>
+      <LineChart data={data} margin={{ right: 32 }}>
         <XAxis dataKey={getFormattedDate} />
         <YAxis type="number" domain={[minPrice - 100, maxPrice + 100]} />
         <Tooltip content={<HistoricTooltip />} />
@@ -59,7 +54,7 @@ const HistoricPriceChart: React.FC<HistoricPriceChartProps> = ({ data }) => {
             animationDuration={300}
           />
         ))}
-      </StyledLineChart>
+      </LineChart>
     </ResponsiveContainer>
   );
 };

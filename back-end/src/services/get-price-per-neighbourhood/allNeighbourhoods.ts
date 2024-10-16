@@ -10,7 +10,7 @@ const allNeighbourhoods: NeighbourhoodAlias[] = [
   { id: "dacia", aliases: ["dacia", "zimbru"] },
   { id: "alexandru", aliases: ["alexandru"] },
   { id: "mircea", aliases: ["mircea"] },
-  { id: "moara de vant", aliases: ["moara de vant", "ticau"] },
+  { id: "moara de vant", aliases: ["moara de vant"] },
   { id: "tatarasi", aliases: ["tatarasi"] },
   { id: "tudor", aliases: ["tudor"] },
   { id: "podu ros", aliases: ["podu ros", "tesatura"] },
