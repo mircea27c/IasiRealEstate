@@ -13,5 +13,5 @@ const updateDbPricesJob = async () => {
 
 export const startUpdateDbPricesJob = () => {
   console.log("Starting db update price job");
-  cron.schedule(`*/10 * * * *`, updateDbPricesJob);
+  cron.schedule(`0 */3 * * *`, updateDbPricesJob);
 };
