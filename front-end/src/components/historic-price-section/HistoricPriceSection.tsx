@@ -8,7 +8,8 @@ const HistoricPriceSection: React.FC = () => {
   const { data, loading, error } = useGetApiClient<ApiHistoricPrices>(
     "/get-historic-prices?startDate=2024-01-01&endDate=2025-01-01",
   );
-  if (loading || !data) return <LoadingSpinner />;
+  if (loading || !data || data.historicPrices.length == 0)
+    return <LoadingSpinner />;
 
   return <HistoricPriceChart data={data.historicPrices} />;
 };
