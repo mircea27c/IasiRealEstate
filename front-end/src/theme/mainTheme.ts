@@ -3,6 +3,7 @@ import { Theme } from "@emotion/react";
 export const mainTheme: Theme = {
   colours: {
     primary: "#658A74",
+    primaryDark: "#34543e",
     secondary: "#21295C",
     tertiary: "#1B3B6F",
     accent: "#70A3B3",
@@ -11,6 +12,8 @@ export const mainTheme: Theme = {
     text: "#232322",
     black: "#000000",
     shadow: "rgba(0,0,0,0.13)",
+    error: "rgb(227,106,106)",
+    success: "rgb(87,168,98)",
     chart: [
       "#382269",
       "#3b3b3b",

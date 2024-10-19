@@ -17,7 +17,6 @@ startUpdateDbPricesJob();
 startUpdateDbHistoricPricesJob();
 
 app.get("/", (_req, res) => {
-  console.log("Pinged");
   res.status(200).send("Welcome to the Iasi Real Estate Api");
 });
 app.get("/api/healthcheck", (_req, res) => {

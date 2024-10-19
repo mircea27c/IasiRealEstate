@@ -7,6 +7,7 @@ interface FontConfig {
     medium: string;
     large: string;
     title: string;
+    header: string;
   };
   weights: {
     thin: string;
@@ -23,6 +24,7 @@ const font: FontConfig = {
     medium: `font-size: ${sizes.size18};`,
     large: `font-size: ${sizes.size24};`,
     title: `font-size: ${sizes.size32};`,
+    header: `font-size: ${sizes.size72};`,
   },
   weights: {
     thin: "font-weight: 300;",

@@ -13,6 +13,7 @@ const getPricePerNeighbourhoodFromDb: () => Promise<PricePerNeighbourhoodRespons
   };
 
 const getPricePerNeighbourhoodService = async (_req: any, res: any) => {
+  console.log("Pinged get price per neighbourhood");
   try {
     const response = await getPricePerNeighbourhoodFromDb();
     res.send(response).status(200);
