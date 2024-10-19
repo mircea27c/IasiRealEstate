@@ -9,9 +9,10 @@ import {
 import React from "react";
 import HistoricTooltip from "./HistoricTooltip";
 import { useTheme } from "@emotion/react";
-import { ApiHistoricPrice } from "../../../models/Api/ApiHistoricPrices";
-import styled from "@emotion/styled";
-import sizes from "../../../theme/sizes";
+import {
+  ApiHistoricPrice,
+  ApiHistoricPrices,
+} from "../../../models/Api/ApiHistoricPrices";
 
 const getFormattedDate = (dataObject: ApiHistoricPrice) => {
   const date = new Date(dataObject.timestamp);
@@ -35,15 +36,23 @@ const HistoricPriceChart: React.FC<HistoricPriceChartProps> = ({ data }) => {
       if (priceData.amount > maxPrice) maxPrice = priceData.amount;
     }),
   );
+
+  const sortedData: ApiHistoricPrice[] = data.map((item: ApiHistoricPrice) => ({
+    ...item,
+    prices: item.prices.sort((a, b) =>
+      a.neighbourhood > b.neighbourhood ? 1 : -1,
+    ),
+  }));
+
   minPrice = Math.floor(minPrice / 100) * 100;
   maxPrice = Math.ceil(maxPrice / 100) * 100;
   return (
     <ResponsiveContainer width="90%" aspect={2}>
-      <LineChart data={data} margin={{ right: 32 }}>
+      <LineChart data={sortedData} margin={{ right: 32 }}>
         <XAxis dataKey={getFormattedDate} />
         <YAxis type="number" domain={[minPrice - 100, maxPrice + 100]} />
         <Tooltip content={<HistoricTooltip />} />
-        {data[0].prices.map((item, index) => (
+        {sortedData[0].prices.map((item, index) => (
           <Line
             key={item.neighbourhood}
             type="natural"
