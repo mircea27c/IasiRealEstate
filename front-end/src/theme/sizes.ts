@@ -1,7 +1,6 @@
 const pixelsToRem = (pixels: number) => `${pixels / 16}rem`;
 
 const sizes = {
-  globalLateralPadding: pixelsToRem(160),
   size1: `1px`,
   size2: `2px`,
   size4: pixelsToRem(4),

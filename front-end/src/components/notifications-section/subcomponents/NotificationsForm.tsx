@@ -15,6 +15,7 @@ const StyledLabel = styled.label`
   display: flex;
   flex-direction: column;
 
+  text-align: left;
   ${font.weights.thick}
   color: ${({ theme }) => theme.colours.primary};
 `;

@@ -26,7 +26,7 @@ const AppContainer = styled.div`
 
 const PageContainer = styled.div`
   width: 100%;
-  padding: ${sizes.size12} ${sizes.globalLateralPadding};
+  padding: ${sizes.size12} ${sizes.size8};
   box-sizing: border-box;
 
   display: flex;
@@ -35,10 +35,6 @@ const PageContainer = styled.div`
   column-gap: ${sizes.size12};
 
   flex-grow: 1;
-
-  @media (max-width: 800px) {
-    padding: ${sizes.size12};
-  }
 `;
 
 const App: React.FC = () => {

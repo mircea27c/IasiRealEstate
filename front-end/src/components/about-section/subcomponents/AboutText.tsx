@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import font from "../../../theme/font";
 import sizes from "../../../theme/sizes";
+import { BREAKPOINT_MOBILE } from "../../../theme/responsiveSizes";
 
 const StyledSubtitle = styled.div`
   ${font.sizes.title};
@@ -18,6 +19,11 @@ const AboutTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+
+  @media (max-width: ${BREAKPOINT_MOBILE}) {
+    flex-grow: 1;
+    justify-content: space-evenly;
+  }
 `;
 const StyledEmail = styled.div`
   width: fit-content;

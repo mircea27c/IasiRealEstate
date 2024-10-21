@@ -1,4 +1,5 @@
 import sizes from "./sizes";
+import { BREAKPOINT_MOBILE } from "./responsiveSizes";
 
 interface FontConfig {
   family: string;
@@ -17,14 +18,21 @@ interface FontConfig {
   };
 }
 
+const getResponsiveFontSize = (desktopSize: string, mobileSize: string) => `
+  font-size: ${desktopSize};
+  @media (max-width: ${BREAKPOINT_MOBILE}){
+    font-size: ${mobileSize};
+  }
+`;
+
 const font: FontConfig = {
   family: `font-family: "DM Sans", sans-serif;`,
   sizes: {
-    small: `font-size: ${sizes.size14};`,
-    medium: `font-size: ${sizes.size18};`,
-    large: `font-size: ${sizes.size24};`,
-    title: `font-size: ${sizes.size32};`,
-    header: `font-size: ${sizes.size72};`,
+    small: getResponsiveFontSize(sizes.size14, sizes.size12),
+    medium: getResponsiveFontSize(sizes.size18, sizes.size14),
+    large: getResponsiveFontSize(sizes.size24, sizes.size20),
+    title: getResponsiveFontSize(sizes.size32, sizes.size24),
+    header: getResponsiveFontSize(sizes.size72, sizes.size32),
   },
   weights: {
     thin: "font-weight: 300;",
