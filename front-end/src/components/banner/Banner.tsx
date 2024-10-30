@@ -12,7 +12,7 @@ const BannerContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  color: ${({ theme }) => theme.colours.secondary};
+  color: ${({ theme }) => theme.colours.text};
 
   background-color: ${({ theme }) => theme.colours.foreground};
 `;

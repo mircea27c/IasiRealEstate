@@ -1,17 +1,35 @@
 import db from "../../db/db";
 import { CheerioAPI } from "cheerio";
-import allNeighbourhoods, {
-  NeighbourhoodAlias,
-} from "../get-price-per-neighbourhood/allNeighbourhoods";
+import allNeighbourhoods, { NeighbourhoodAlias } from "./allNeighbourhoods";
 import scrapeNeighbourhoodOLX from "../../scrapers/scrapeNeighbourhoodOLX";
 import NeighbourhoodOfferData from "../../models/NeighbourhoodOfferData";
 import alertOwnerEmail from "../../emails/alertOwnerEmail";
+import getAverage from "../../helpers/getAverage";
+import {
+  getLastUpdateTime,
+  updateLastUpdateTime,
+} from "../../helpers/dbLastUpdateTime";
+import {
+  getTimeDifferenceFromNow,
+  msToHours,
+} from "../../helpers/getTimeDifferenceFromNow";
+import neighbourhoodOfferData from "../../models/NeighbourhoodOfferData";
 
 let goodDealOffers: NeighbourhoodOfferData[] = [];
 
-const getAverage = (array: number[]) => {
-  if (array.length == 0) return 0;
-  return Math.round(array.reduce((acc, value) => acc + value) / array.length);
+const alertOwner = async (goodDeals: neighbourhoodOfferData[]) => {
+  try {
+    if (goodDealOffers.length < 0) return;
+
+    const LAST_OWNER_UPDATE_DB_KEY = "last_owner_update";
+    const lastOwnerUpdateDate = getLastUpdateTime(LAST_OWNER_UPDATE_DB_KEY);
+    if (!lastOwnerUpdateDate) return;
+
+    await updateLastUpdateTime(LAST_OWNER_UPDATE_DB_KEY);
+    await alertOwnerEmail(goodDealOffers);
+  } catch (err) {
+    console.error(`Error alerting owner: ${err}`);
+  }
 };
 
 const averagePricePerAreaFromListings = (
@@ -63,13 +81,16 @@ const averagePricePerAreaFromListings = (
       if (pricePerArea > MIN_VALID_PRICE && pricePerArea < MAX_VALID_PRICE) {
         if (pricePerArea < MIN_VALID_PRICE * 1.9) {
           console.log("Good offer");
-          goodDealOffers.push({
+          const goodOffer = {
             url: titleElement.attr("href") ?? "",
             title: titleElement.text(),
             totalPrice: price,
             pricePerArea: pricePerArea,
             area: area,
-          });
+          };
+          if (!goodDealOffers.some((item) => item.url === goodOffer.url)) {
+            goodDealOffers.push(goodOffer);
+          }
         }
         validPrices.push(pricePerArea);
       }
@@ -89,30 +110,61 @@ const averagePricePerAreaFromListings = (
 const getNeighbourhoodAveragePrice = async (
   neighbourhood: NeighbourhoodAlias,
 ): Promise<number> => {
-  const prices = [];
+  const PAGES_TO_SCRAP_PER_NEIGHBOURHOOD = 5;
+  const prices: number[] = [];
+
+  const scrapeQueries: Promise<void>[] = [];
+
   for (const alias of neighbourhood.aliases) {
-    const $ = await scrapeNeighbourhoodOLX(alias, 1);
-    if (!$) {
-      console.error(`Couldn't scrape for alias ${alias}`);
-      continue;
+    const uniqueLinks: string[] = [];
+    for (
+      let pageIndex = 1;
+      pageIndex <= PAGES_TO_SCRAP_PER_NEIGHBOURHOOD;
+      pageIndex++
+    ) {
+      scrapeQueries.push(
+        scrapeNeighbourhoodOLX(alias, pageIndex).then(($) => {
+          if (!$) {
+            console.error(`Couldn't scrape for alias ${alias}`);
+            return;
+          }
+
+          const listings = $("[data-cy='ad-card-title']");
+          const listingNameRegex = new RegExp(
+            `(?<![a-zA-Z])${neighbourhood}(?![a-zA-Z])`,
+            "i",
+          );
+
+          const validListings = listings.filter((_: number, item) =>
+            listingNameRegex.test($(item).find("a").text()),
+          );
+
+          const uniqueListings = validListings.filter((_, item) => {
+            const link = $(item).find("a").attr("href");
+            if (link && !uniqueLinks.some((item) => item === link)) {
+              uniqueLinks.push(link);
+              return true;
+            } else {
+              return false;
+            }
+          });
+
+          if (!validListings || validListings.length == 0) return;
+
+          console.log(
+            `Scraping page ${pageIndex} of ${alias}, found ${validListings.length} results`,
+          );
+
+          const price = averagePricePerAreaFromListings($, uniqueListings);
+          if (price) {
+            prices.push(price);
+          }
+        }),
+      );
     }
-
-    const listings = $("[data-cy='ad-card-title']");
-    const listingNameRegex = new RegExp(
-      `(?<![a-zA-Z])${neighbourhood}(?![a-zA-Z])`,
-      "i",
-    );
-
-    const validListings = listings.filter((_: number, item) =>
-      listingNameRegex.test($(item).find("a").text()),
-    );
-
-    if (validListings.length == 0) continue;
-
-    const price = averagePricePerAreaFromListings($, validListings);
-    if (price) prices.push(price);
   }
 
+  await Promise.allSettled(scrapeQueries);
   return getAverage(prices);
 };
 
@@ -132,16 +184,32 @@ const updateDbPriceForNeighbourhood = async (
 };
 
 export const updateDbPrices = async () => {
-  const queries = [];
-  goodDealOffers = [];
-  for (const neighbourhood of allNeighbourhoods) {
-    const price = await getNeighbourhoodAveragePrice(neighbourhood);
-    if (price > 0) {
-      queries.push(updateDbPriceForNeighbourhood(neighbourhood.id, price));
-    }
+  const LAST_UPDATE_PRICE_DB_KEY = "last_prices_update";
+  const lastUpdatedTime = await getLastUpdateTime(LAST_UPDATE_PRICE_DB_KEY);
+  if (!lastUpdatedTime) return;
+  if (msToHours(getTimeDifferenceFromNow(lastUpdatedTime)) < 6) {
+    return;
   }
-  if (goodDealOffers.length > 0) alertOwnerEmail(goodDealOffers);
-  await Promise.all(queries);
+
+  const dbQueries: Promise<void>[] = [];
+  goodDealOffers = [];
+
+  console.log("start scraping");
+  const scrapeQueries = allNeighbourhoods.map((neighbourhood) => {
+    return getNeighbourhoodAveragePrice(neighbourhood).then((price) => {
+      if (price > 0) {
+        dbQueries.push(updateDbPriceForNeighbourhood(neighbourhood.id, price));
+      }
+    });
+  });
+
+  await Promise.all(scrapeQueries);
+  console.log("done scraping");
+
+  alertOwner(goodDealOffers);
+
+  await updateLastUpdateTime(LAST_UPDATE_PRICE_DB_KEY);
+  await Promise.all(dbQueries);
 };
 
 const updateDbPricesService = async (_req: any, res: any) => {

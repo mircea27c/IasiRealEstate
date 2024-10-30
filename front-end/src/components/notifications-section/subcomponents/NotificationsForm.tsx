@@ -94,7 +94,12 @@ const NotificationsForm: React.FC = () => {
     const data = await result.json();
     console.log(data);
     setSuccess(data.success);
-    setError((data.userError ?? data.error) ? "S-a produs o eroare!" : null);
+    if (data.error) {
+      console.log(data.error);
+      setError(data.userError ?? "S-a produs o eroare!");
+    } else {
+      setError(null);
+    }
     setLoading(false);
   };
 

@@ -9,7 +9,7 @@ const alertOwnerEmail = async (goodDealOffers: NeighbourhoodOfferData[]) => {
   );
 
   const mailOptions = {
-    from: process.env.SMTP_EMAIL,
+    from: `"Iasi Real Estate" <${process.env.SMTP_EMAIL}>`,
     to: process.env.OWNER_EMAIL,
     subject: `Apartamente iasi: ${Math.round(bestPricePerArea.pricePerArea)} EUR/mp`,
     text: goodDealOffers

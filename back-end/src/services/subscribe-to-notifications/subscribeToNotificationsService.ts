@@ -10,22 +10,38 @@ const subscribeToNotificationsService = async (req: any, res: any) => {
         require_tld: true,
       })
     ) {
-      res.send({ error: "Invalid Email", userError: "Invalid email!" });
+      res.send({ error: "Invalid Email", userError: "Email invalid!" });
       return;
     }
 
-    const query = `
+    const existingEmailResult = await db.query(
+      `
+     SELECT * FROM emailing_list
+     WHERE email = $1;
+    `,
+      [email],
+    );
+
+    if (existingEmailResult.rowCount) {
+      res.send({
+        error: "Already subscribed",
+        userError: "Eroare! Esti abonat deja!",
+      });
+      return;
+    }
+
+    await db.query(
+      `
     INSERT INTO emailing_list (email) 
     VALUES ($1)
     RETURNING *;
-  `;
-
-    await db.query(query, [email]);
+  `,
+      [email],
+    );
 
     res.send({ success: true });
   } catch (err) {
-    console.error(`Error subscribing to notifications! ${err}`);
-    res.send({ error: err, userError: "Error subscribing with email!" });
+    res.send({ error: err, userError: "Eroare la abonare!" });
   }
 };
 

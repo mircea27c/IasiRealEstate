@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { updateDbPrices } from "../services/update-db-prices/updateDbPrices";
-import { DB_PRICES_INTERVAL_HOURS } from "../configuration/dbUpdateIntervals";
+import { DB_PRICES_JOB_INTERVAL } from "../configuration/dbUpdateIntervals";
 
 const updateDbPricesJob = async () => {
   try {
@@ -12,6 +12,5 @@ const updateDbPricesJob = async () => {
 };
 
 export const startUpdateDbPricesJob = () => {
-  console.log("Starting db update price job");
-  cron.schedule(`0 */${DB_PRICES_INTERVAL_HOURS} * * *`, updateDbPricesJob);
+  cron.schedule(DB_PRICES_JOB_INTERVAL, updateDbPricesJob);
 };

@@ -14,7 +14,7 @@ const StyledSubtitle = styled.div`
 `;
 const HighlightedSubtitle = styled.span`
   ${font.weights.black};
-  color: ${({ theme }) => theme.colours.secondary};
+  color: ${({ theme }) => theme.colours.text};
 `;
 
 const NotificationsText: React.FC = () => {

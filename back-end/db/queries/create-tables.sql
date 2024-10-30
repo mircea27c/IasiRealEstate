@@ -11,3 +11,7 @@ CREATE TABLE prices_history(
 CREATE TABLE emailing_list(
    email VARCHAR(50) PRIMARY KEY
 );
+CREATE TABLE timestamps(
+   id VARCHAR(50) PRIMARY KEY,
+   time_entry TIMESTAMP NOT NULL
+);

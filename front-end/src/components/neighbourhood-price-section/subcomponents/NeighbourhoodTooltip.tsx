@@ -33,14 +33,14 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({
       boxSizing: "border-box",
       boxShadow: `0 0 ${sizes.size4} ${theme.colours.black}`,
       whiteSpace: "nowrap",
-      color: theme.colours.tertiary,
+      color: theme.colours.text,
     }}
   >
     <div
       style={{
         fontSize: sizes.size16,
         fontWeight: 600,
-        borderBottom: `${sizes.size1} solid ${theme.colours.tertiary}`,
+        borderBottom: `${sizes.size1} solid ${theme.colours.text}`,
         width: "fit-content",
         minWidth: "50%",
       }}

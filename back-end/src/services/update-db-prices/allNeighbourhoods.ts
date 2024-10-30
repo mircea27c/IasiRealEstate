@@ -18,7 +18,7 @@ const allNeighbourhoods: NeighbourhoodAlias[] = [
   { id: "cug", aliases: ["cug"] },
   { id: "frumoasa", aliases: ["frumoasa"] },
   { id: "zona industriala", aliases: ["metalurgie", "baza 3"] },
-  { id: "manta rosie", aliases: ["manta rosie"] },
+  { id: "manta rosie", aliases: ["manta rosie", "poitiers"] },
   { id: "bucium", aliases: ["bucium"] },
   { id: "galata", aliases: ["galata"] },
   { id: "nicolina", aliases: ["nicolina"] },

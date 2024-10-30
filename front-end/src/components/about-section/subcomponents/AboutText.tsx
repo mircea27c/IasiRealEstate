@@ -32,7 +32,7 @@ const StyledEmail = styled.div`
 
   border-radius: ${sizes.size4};
   background-color: ${({ theme }) => theme.colours.background};
-  color: ${({ theme }) => theme.colours.secondary};
+  color: ${({ theme }) => theme.colours.text};
 `;
 
 interface InfoPanelProps {

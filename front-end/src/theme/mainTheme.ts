@@ -9,7 +9,7 @@ export const mainTheme: Theme = {
     accent: "#70A3B3",
     background: "#E3EBE1",
     foreground: "#F2FFF0",
-    text: "#232322",
+    text: "#377750",
     black: "#000000",
     shadow: "rgba(0,0,0,0.27)",
     error: "rgb(227,106,106)",

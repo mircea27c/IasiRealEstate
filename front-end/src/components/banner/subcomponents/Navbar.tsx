@@ -27,14 +27,13 @@ const StyledLink = styled(Link)`
   display: flex;
   align-items: center;
 
-  color: ${({ theme }) => theme.colours.secondary};
+  color: ${({ theme }) => theme.colours.text};
   &:visited {
-    color: ${({ theme }) => theme.colours.secondary};
+    color: ${({ theme }) => theme.colours.text};
   }
 `;
 const StyledUnderline = styled.div`
-  ${({ theme }) =>
-    `border-bottom: ${sizes.size2} solid ${theme.colours.secondary}`};
+  ${({ theme }) => `border-bottom: ${sizes.size2} solid ${theme.colours.text}`};
 `;
 const OpenHamburgerButton = styled.button`
   background-color: transparent;

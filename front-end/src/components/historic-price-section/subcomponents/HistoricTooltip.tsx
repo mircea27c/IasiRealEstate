@@ -25,7 +25,7 @@ const TooltipContainer = styled.div`
   background-color: ${({ theme }) => theme.colours.foreground};
   box-shadow: 0 0 ${sizes.size8} ${({ theme }) => theme.colours.shadow};
 
-  color: ${({ theme }) => theme.colours.tertiary};
+  color: ${({ theme }) => theme.colours.text};
   white-space: nowrap;
 `;
 
@@ -33,7 +33,7 @@ const StyledTitle = styled.div`
   ${font.weights.thick};
   margin-bottom: ${sizes.size8};
   padding-bottom: ${sizes.size4};
-  border-bottom: ${sizes.size1} solid ${({ theme }) => theme.colours.tertiary};
+  border-bottom: ${sizes.size1} solid ${({ theme }) => theme.colours.text};
 `;
 
 const ListElementContainer = styled.div<{ colour: string }>`
