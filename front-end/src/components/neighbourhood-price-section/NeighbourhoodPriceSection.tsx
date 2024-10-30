@@ -4,6 +4,7 @@ import { FeatureCollection } from "geojson";
 import NeighbourhoodsMap from "./subcomponents/NeighbourhoodsMap";
 import LoadingSpinner from "../loading-spinner/LoadingSpinner";
 import useGetApiClient from "../../clients/useGetApiClient";
+import ErrorSection from "../error-section/ErrorSection";
 
 const NeighbourhoodPriceSection: React.FC = () => {
   const [geoData, setGeoData] = useState<FeatureCollection | undefined>(
@@ -18,6 +19,8 @@ const NeighbourhoodPriceSection: React.FC = () => {
       .then((data) => setGeoData(data))
       .catch((err) => console.log(`Error occurred when fetching: ${err}`));
   }, []);
+  if (error) return <ErrorSection />;
+
   if (!geoData || !data || loading) return <LoadingSpinner />;
   return <NeighbourhoodsMap geoData={geoData} pricesData={data} />;
 };
