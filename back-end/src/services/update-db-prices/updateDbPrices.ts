@@ -11,6 +11,7 @@ import {
 } from "../../helpers/dbLastUpdateTime";
 import {
   getTimeDifferenceFromNow,
+  msToDays,
   msToHours,
 } from "../../helpers/getTimeDifferenceFromNow";
 import neighbourhoodOfferData from "../../models/NeighbourhoodOfferData";
@@ -22,8 +23,13 @@ const alertOwner = async (goodDeals: neighbourhoodOfferData[]) => {
     if (goodDealOffers.length < 0) return;
 
     const LAST_OWNER_UPDATE_DB_KEY = "last_owner_update";
-    const lastOwnerUpdateDate = getLastUpdateTime(LAST_OWNER_UPDATE_DB_KEY);
+    const lastOwnerUpdateDate = await getLastUpdateTime(
+      LAST_OWNER_UPDATE_DB_KEY,
+    );
     if (!lastOwnerUpdateDate) return;
+    if (msToDays(getTimeDifferenceFromNow(lastOwnerUpdateDate)) < 2) {
+      return;
+    }
 
     await updateLastUpdateTime(LAST_OWNER_UPDATE_DB_KEY);
     await alertOwnerEmail(goodDealOffers);
