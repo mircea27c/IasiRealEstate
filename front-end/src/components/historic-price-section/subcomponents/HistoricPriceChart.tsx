@@ -10,8 +10,6 @@ import React from "react";
 import HistoricTooltip from "./HistoricTooltip";
 import { useTheme } from "@emotion/react";
 import { ApiHistoricPrice } from "../../../models/Api/ApiHistoricPrices";
-import styled from "styled-components";
-import { BREAKPOINT_MOBILE } from "../../../theme/responsiveSizes";
 import useIsMobile from "../../../theme/useIsMobile";
 
 const getFormattedDate = (dataObject: ApiHistoricPrice) => {
@@ -48,7 +46,6 @@ const HistoricPriceChart: React.FC<HistoricPriceChartProps> = ({ data }) => {
   maxPrice = Math.ceil(maxPrice / 100) * 100;
 
   const isMobile = useIsMobile();
-  const MOBILE_ASPECT = 0.8;
   const DESKTOP_ASPECT = 2;
   return (
     <ResponsiveContainer
@@ -56,10 +53,14 @@ const HistoricPriceChart: React.FC<HistoricPriceChartProps> = ({ data }) => {
       aspect={!isMobile ? DESKTOP_ASPECT : undefined}
       height={isMobile ? 500 : undefined}
     >
-      <LineChart data={sortedData} margin={{ right: 32 }}>
+      <LineChart
+        data={sortedData}
+        margin={{ right: 32 }}
+        onMouseMove={() => {}}
+      >
         <XAxis dataKey={getFormattedDate} />
         <YAxis type="number" domain={[minPrice - 100, maxPrice + 100]} />
-        <Tooltip content={<HistoricTooltip />} />
+        <Tooltip position={{ y: 0 }} content={<HistoricTooltip />} />
         {sortedData[0].prices.map((item, index) => (
           <Line
             key={item.neighbourhood}

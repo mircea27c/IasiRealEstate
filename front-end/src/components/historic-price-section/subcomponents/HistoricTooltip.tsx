@@ -9,11 +9,11 @@ import {
 import styled from "@emotion/styled";
 import font from "../../../theme/font";
 import { ApiNeighbourhoodPrice } from "../../../models/Api/ApiNeighbourhoodPrices";
+import { BREAKPOINT_MOBILE } from "../../../theme/responsiveSizes";
 
 const TooltipContainer = styled.div`
   min-width: 180px;
   width: fit-content;
-  height: fit-content;
   padding: ${sizes.size12};
   box-sizing: border-box;
 
@@ -38,13 +38,17 @@ const StyledTitle = styled.div`
 
 const ListElementContainer = styled.div<{ colour: string }>`
   width: 100%;
-  height: 30px;
+  height: ${sizes.size32};
   display: flex;
   justify-content: space-between;
-  gap: ${sizes.size8};
+  gap: ${sizes.size2};
   align-items: center;
 
   color: ${({ colour }) => colour};
+
+  @media (max-width: ${BREAKPOINT_MOBILE}) {
+    height: ${sizes.size20};
+  }
 `;
 
 const StyledPrice = styled.span`
@@ -53,6 +57,7 @@ const StyledPrice = styled.span`
 const StyledCurrency = styled.span`
   ${font.sizes.small};
 `;
+
 const formatLongDate = (timestamp: string) => {
   const date = new Date(timestamp);
   const formattedDate = date.toLocaleDateString("en-GB", {

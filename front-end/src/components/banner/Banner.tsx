@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import logo from "../../resources/icons/temp-logo.png";
+import logo from "../../resources/icons/logo.png";
 import sizes from "../../theme/sizes";
 import { responsiveWidthContainer } from "../../theme/responsiveSizes";
 import Navbar from "./subcomponents/Navbar";

@@ -15,7 +15,6 @@ const StyledContainer = styled.div<{ fullHeight: boolean }>`
   background-color: ${({ theme }) => theme.colours.foreground};
   ${responsiveWidthContainer};
 
-  overflow: hidden;
   box-shadow: 0 0 ${sizes.size16} ${({ theme }) => theme.colours.shadow};
   border-radius: ${sizes.size16};
 `;
